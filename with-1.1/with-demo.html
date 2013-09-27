@@ -3,10 +3,17 @@
 </head>
 <body>
 	
-	<p data-with="text: name; val: value"></p>
+	<!--<p data-with="text: name; val: value"></p>-->
 	<ul data-with="contain: books">
-		<example>
-			<li ><p data-with="text"></p></li>
+		<example id="e">
+			<li >
+				<!--<p data-with="text: name"></p>-->
+				<ul data-with="contain: authors">
+					<example>
+						<li data-with="text"></li>
+					</example>
+				</ul>
+			</li>
 		</example>
 	</ul>
 	
@@ -14,7 +21,7 @@
 	<script src="js/data.js"></script>
 	<script src="js/with-1.1.js"></script>
 	<script>
-	fillDocument( result );
+	$( document ).fill( result.data );
 	</script>
 </body>
 </html>

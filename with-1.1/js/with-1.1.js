@@ -1,35 +1,68 @@
+$('example').hide();
 (function ( $ ) {
 	var methods = {
+		settings: {
+			selector: '[data-with]:not(example [data-with])',
+			exampleSelector: '>example',
+			inst: '<inst></inst>'
+		},
+		
 		map: {
 			text: $.fn.text,
 			val: $.fn.val,
 			contain: function ( data ) {
-				var example = $(this).find('example');
-				if ( !example.length )
-					return;
+				//find example, if failed, return
+				var example = this.find( methods.settings.exampleSelector );
+				if (  example.length == 0 ) return;
+				
+				//new instance of example and fill it
+				//var inst = $( methods.settings.inst ).append( $( example.html().trim() ) );
 				
 				for ( var item in data ) {
-					example.find('[data-with]:not(.example)').each( function() {
-						$(this).fill( data[item] );
-					});
-					$(this).append( $( example.html().trim() ) );
+					var inst = $( methods.settings.inst ).append( $( example.html().trim() ) );
+					inst.fill( data[item] );
+					
+					var newInst = $( inst.html().trim() );
+					this.append( newInst );
 				}
 			}
 		},
 		
 		fill: function ( that, data ) {
+			//not empty or null
+			if ( typeof data == 'undefined' || JSON.stringify( data ) == '{}' ) return that;
+			
 			methods.el = that;
-			var params = $(that).data('with').split(';');
-			for ( var index in params ) {
-				var param = params[index].split(':');
-				var arg = data;
-				
-				if ( typeof param[1] !== 'undefined')
-					arg = data[param[1].trim()];
-				methods.map[param[0].trim()].call( $(that), arg );
-			}
+			
+			$( that ).find( methods.settings.selector ).each( function() {
+				methods.fillself( this, data);
+			} );
 			
 			return $(that);
+		},
+		
+		fillself: function ( that, data ) {
+			var params = $( that ).data( 'with' ).split( ';' );
+			
+			for ( var item in params ) {
+				var method = methods.getmethod( params[item] );
+				var arg = methods.getargument( params[item], data );
+				
+				methods.map[method].call( $( that ), arg );
+			}
+		},
+		
+		getmethod: function ( param ) {
+			return param.split( ':' )[0].trim();
+		},
+		
+		getargument: function ( param, data ) {
+			var key = param.split( ':' ).slice( 1 );
+			if ( key.length == 0 ) {
+				return data;
+			} else {
+				return data[key[0].trim()];
+			}
 		}
 	};
 	
@@ -40,13 +73,3 @@
 	};
 	
 })( jQuery );
-
-function fillDocument ( rs ) {
-	$('example').hide();
-	if ( JSON.stringify( rs ) == '{}')
-		return;
-		
-	$('[data-with]:not(.example)').each( function() {
-		$(this).fill( rs.data );
-	});
-}

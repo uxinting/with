@@ -1,10 +1,20 @@
-result = {
+result={
 		data: {
 			name: 'wuxinting',
 			value: 'hotmail',
 			books: [ 
-				'wu',
-				'xin'
+				{
+					name: 'wu',
+					authors: [
+						'xinn',
+					]
+				}, {
+					name: 'xin',
+					authors: [
+						'wu',
+						'ting'
+					]
+				}
 			]
 		}
 	}
