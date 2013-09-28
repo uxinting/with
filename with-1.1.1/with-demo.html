@@ -1,0 +1,27 @@
+<html>
+<head>
+</head>
+<body>
+	
+	<p data-with="text: name.wu; val: value"></p>
+	<ul data-with="list: books">
+		<example id="e">
+			<li >
+				<p data-with="text: '#'-name-loop"></p>
+				<ul data-with="list: authors">
+					<example>
+						<li data-with="text"></li>
+					</example>
+				</ul>
+			</li>
+		</example>
+	</ul>
+	
+	<script src="js/jquery-1.9.1.js"></script>
+	<script src="js/data.js"></script>
+	<script src="js/with-1.1.1.js"></script>
+	<script>
+	$( document ).fill( result.data );
+	</script>
+</body>
+</html>
