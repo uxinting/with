@@ -27,6 +27,9 @@ $('example').hide();
 			href: function ( data ) {
 				this.attr( 'href', data );
 			},
+			src: function ( data ) {
+				this.attr( 'src', data );
+			},
 			list: function ( data ) {
 				//find example, if failed, return
 				var example = this.find( methods.settings.exampleSelector );
@@ -44,7 +47,10 @@ $('example').hide();
 		
 		fill: function ( that, data ) {
 			//not empty or null || JSON.stringify( data ) == '{}'
-			if ( typeof data == 'undefined' ) return that;
+			if ( typeof data == 'undefined' ) {
+				$( '[data-with^="bool"]' ).remove();
+				return that;
+			}
 			
 			methods.el = that;
 			
