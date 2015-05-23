@@ -1,7 +1,7 @@
 (function ( $ ) {
 	var methods = {
 		settings: {
-			exampleSelector: '>example',
+			exampleSelector: '>[data-example="true"]',
 			boolSelector: '[data-with^="bool"]',
 			key: /^\w/,
 			reTernary: /^(\w+)\?\((.*)\)\((.*)\)$/
@@ -32,10 +32,10 @@
 				var example = this.find( methods.settings.exampleSelector );
 				if (  example.length == 0 ) return;
 				
-				var items = methods.data[arg];
+				var items = methods.unaryParam( arg );
 				for ( var item in items ) {
 					//new instance of example and fill it
-					var inst = $( example.html().trim() );
+					var inst = example.clone().removeAttr('data-example');
 					inst.fill( items[item], {"loop": item} );
 					
 					this.append( inst );
@@ -112,7 +112,6 @@
 			
 			//handle key
 			var key = arg.split('-');
-			$.extend( data, methods.sys );
 
 			for ( var item in key ) {
 				if ( methods.settings.key.test( key[item] ) )

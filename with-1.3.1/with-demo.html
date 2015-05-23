@@ -1,7 +1,7 @@
 <html>
 <head>
 <style>
-example{
+[data-example="true"]{
 	display: none;
 }
 </style>
@@ -20,24 +20,30 @@ example{
 	</div>
 	
 	<ul data-with="list: books">
-		<example id="e">
-			<li >
+			<li data-example="true" >
 				<p data-with="text: '#'-name-loop"></p>
 				<ul data-with="list: authors">
-					<example>
-						<li data-with="text"></li>
-					</example>
+				    <li data-example="true" data-with="text"></li>
 				</ul><!---->
 			</li>
-		</example>
 	</ul>
+    
+    <ul id="test" data-with="list">
+        <example><li data-with="text"></li></example>
+    </ul>
+    
+    <table>
+        <tbody data-with="list">
+            <tr><td>hello</td></tr>
+            <tr data-example="true"><td data-with="text: greet"></td></tr>
+        </tbody>
+    </table>
 	
 	<script src="js/jquery-1.9.1.js"></script>
 	<script src="js/data.js"></script>
-	<script src="js/with-1.2.1.js"></script>
+	<script src="../with.min.js"></script>
 	<script>
-	//$( 'body' ).fill( result.data );
-	$( 'body' ).fill( {} );
+	$( 'body' ).fill( result.data );
 	</script>
 </body>
 </html>
