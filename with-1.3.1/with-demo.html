@@ -7,11 +7,12 @@
 </style>
 </head>
 <body>
+    <div data-with="bool: 1+1?(text: 'hello')(text: '#'+name+value+(3-1))"></div>
 	
-	<div data-with="attr: id,'#'-name-value;">
+	<div data-with="attr: id,'#'+name+value;">
 		<a data-with="text: name"></a>
-	<input data-with="bool: input?(val: value)(val: 'hello')">
-	<input id="x" readonly="readonly" data-with="val: name">
+        <input data-with="bool: input?(val: value)(val: 'hello')">
+        <input id="x" readonly="readonly" data-with="val: name">
 	</div>
 	<a data-with="href: name"></a>
 	<div data-with="fill: user">
@@ -21,10 +22,10 @@
 	
 	<ul data-with="list: books">
 			<li data-example="true" >
-				<p data-with="text: '#'-name-loop"></p>
+				<p data-with="text: '#'+name+loop"></p>
 				<ul data-with="list: authors">
 				    <li data-example="true" data-with="text"></li>
-				</ul><!---->
+				</ul>
 			</li>
 	</ul>
     
@@ -41,7 +42,7 @@
 	
 	<script src="js/jquery-1.9.1.js"></script>
 	<script src="js/data.js"></script>
-	<script src="../with.min.js"></script>
+	<script src="js/with-1.3.1.js"></script>
 	<script>
 	$( 'body' ).fill( result.data );
 	</script>

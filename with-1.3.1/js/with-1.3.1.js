@@ -1,10 +1,23 @@
 (function ( $ ) {
+    Array.prototype.unique = function() {
+        var n = {},r=[];
+        for(var i = 0; i < this.length; i++)
+        {
+            if (!n[this[i]])
+            {
+                n[this[i]] = true;
+                r.push(this[i]);
+            }
+        }
+        return r;
+    }
+    
 	var methods = {
 		settings: {
 			exampleSelector: '>[data-example="true"]',
 			boolSelector: '[data-with^="bool"]',
-			key: /^\w/,
-			reTernary: /^(\w+)\?\((.*)\)\((.*)\)$/
+			key: /^[a-zA-Z]+$/,
+			reTernary: /^(.+)\?\((.*)\)\((.*)\)$/
 		},
 		
 		sys: {},
@@ -87,7 +100,7 @@
 				params = params.split( ';' );
 			}
 			
-			for ( var item in params ) {
+			for ( var item = 0; item < params.length; item++ ) {
 				var method = methods.getMethod( params[item] );
 				var arg = methods.getArgument( params[item] );
 				
@@ -111,14 +124,15 @@
 			var data = $.extend( methods.data, methods.sys );
 			
 			//handle key
-			var key = arg.split('-');
+            var keys = arg.split(/[+-/*%]/).filter( function(val) {
+                return methods.settings.key.test( val );
+            } ).unique();
 
-			for ( var item in key ) {
-				if ( methods.settings.key.test( key[item] ) )
-					key[item] = 'data.' + key[item];
+			for ( var i = 0; i < keys.length; i++ ) {
+				arg = arg.replace( keys[i], 'data.'+keys[i] )
 			}
 			
-			return eval( 'try{' + key.join('+') + '}catch(e){""}' );
+			return eval( 'try{' + arg + '}catch(e){""}' );
 		},
 		
 		dualParams: function ( arg ) {
