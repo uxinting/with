@@ -7,7 +7,7 @@
 </style>
 </head>
 <body>
-    <div data-with="bool: 1+1?(text: 'hello')(text: '#'+name+value+(3-1))"></div>
+    <div data-with="bool: 1+1?(text: 0.9*100+'hello')(text: '#'+name+value+(3-1))"></div>
 	
 	<div data-with="attr: id,'#'+name+value;">
 		<a data-with="text: name"></a>
@@ -42,7 +42,7 @@
 	
 	<script src="js/jquery-1.9.1.js"></script>
 	<script src="js/data.js"></script>
-	<script src="js/with-1.3.1.js"></script>
+	<script src="../with.min.js"></script>
 	<script>
 	$( 'body' ).fill( result.data );
 	</script>
