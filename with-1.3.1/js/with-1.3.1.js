@@ -21,6 +21,13 @@
 		},
 		
 		sys: {},
+        
+        config: {
+            remote: false,
+            type: 'get',
+            params: {},
+            before: function( rs, st ){ return true; }
+        },
 		
 		map: {
 			text: function ( arg ) {
@@ -46,10 +53,10 @@
 				if (  example.length == 0 ) return;
 				
 				var items = methods.unaryParam( arg );
-				for ( var item in items ) {
+				for ( var item = 0; item < items.length; item++ ) {
 					//new instance of example and fill it
 					var inst = example.clone().removeAttr('data-example');
-					inst.fill( items[item], {"loop": item} );
+					inst.fill( items[item], {data: {"loop": item}} );
 					
 					this.append( inst );
 				}
@@ -154,10 +161,32 @@
 	};
 	
 	$.fn.fill = function ( data, sys ) {
-		$.extend( methods.sys, sys );
-		return this.each( function() {
-			return methods.fill( this, data );
-		});
+        if ( typeof sys != 'undefined' ) {
+            $.extend( methods.sys, sys.data );
+            $.extend( methods.config, sys.config );
+        }
+        
+        return this.each( function() {
+            if ( methods.config.remote ) {
+                if ( methods.config.type.toLowerCase() == 'get' ) {
+                    $.get(data, function( rs, st ) {
+                        if ( methods.config.before( rs, st ) ) {
+                            return methods.fill( this, rs );
+                        }
+                    });
+                } else if ( methods.config.type.toLowerCase() == 'post' ) {
+                    $.post(data, methods.config.params, function( rs, st ) {
+                        if ( methods.config.before( rs, st ) ) {
+                            return methods.fill( this, rs );
+                        }
+                    });
+                } else {
+                    return this;
+                }
+            } else {
+                return methods.fill( this, data );
+            }
+        });
 	};
 	
 })( jQuery );

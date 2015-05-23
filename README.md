@@ -3,6 +3,12 @@
 
 在html元素中添加data-with属性，格式为data-with="方法:值或变量"
 
+选择节点填充数据，如
+    $('body').fill(data)
+    
+可以传入额外的值sys，同样参与填充
+    $('body').fill(data, sys)
+
 ## 基础方法 ##
 text: value 填充data.value到text
 val: value 填充data.value到val

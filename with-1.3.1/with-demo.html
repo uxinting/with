@@ -7,6 +7,7 @@
 </style>
 </head>
 <body>
+    <div id="remote" data-with="text"></div>
     <div data-with="bool: 1+1?(text: 0.9*100+'hello')(text: '#'+name+value+(3-1))"></div>
 	
 	<div data-with="attr: id,'#'+name+value;">
@@ -45,6 +46,10 @@
 	<script src="../with.min.js"></script>
 	<script>
 	$( 'body' ).fill( result.data );
+//    $('#remote').fill( 'with-demo.html', {config: {remote: true,
+//                                                  function(rs,st){
+//                                                    alert('before');
+//                                                  }}} );
 	</script>
 </body>
 </html>
