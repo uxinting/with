@@ -1,20 +1,8 @@
 (function ( $ ) {
-    Array.prototype.unique = function() {
-        var n = {},r=[];
-        for(var i = 0; i < this.length; i++)
-        {
-            if (!n[this[i]])
-            {
-                n[this[i]] = true;
-                r.push(this[i]);
-            }
-        }
-        return r;
-    }
     
 	var methods = {
 		settings: {
-			exampleSelector: '>[data-example="true"]',
+			exampleSelector: '[data-example="true"]',
 			boolSelector: '[data-with^="bool"]',
 			key: /^[a-zA-Z]+$/,
 			reTernary: /^(.+)\?\((.*)\)\((.*)\)$/
@@ -49,11 +37,12 @@
 			
 			list: function ( arg ) {
 				//find example, if failed, return
-				var example = this.find( methods.settings.exampleSelector );
+				var example = this.children( methods.settings.exampleSelector );
 				if (  example.length == 0 ) return;
 				
 				var items = methods.unaryParam( arg );
 				for ( var item = 0; item < items.length; item++ ) {
+                    if ( typeof items[item] === 'undefined' ) continue; //IE
 					//new instance of example and fill it
 					var inst = example.clone().removeAttr('data-example');
 					inst.fill( items[item], {data: {"loop": item}} );
@@ -159,6 +148,51 @@
 			}
 		}
 	};
+    
+    //Hide all data-example="true"
+//    $( methods.settings.exampleSelector ).hide();
+    
+    if ( typeof Array.prototype.unique === 'undefined' )
+    Array.prototype.unique = function() {
+        var n = {},r=[];
+        for(var i = 0; i < this.length; i++)
+        {
+            if (!n[this[i]])
+            {
+                n[this[i]] = true;
+                r.push(this[i]);
+            }
+        }
+        return r;
+    };
+    
+    //Add trim function for string object
+    if ( typeof Array.prototype.trim === 'undefined' )
+    String.prototype.trim = function() {
+        return this.replace(/(^\s*)|(\s*$)/g,"");
+    };
+    
+    //Add filter function from Array object
+    if ( typeof Array.prototype.filter === 'undefined' )
+    Array.prototype.filter = function(fun /*, thisArg */){
+        "use strict";
+        if (this === void 0 || this === null)
+            throw new TypeError();
+        var t = Object(this);
+        var len = t.length >>> 0;
+        if (typeof fun !== "function")
+            throw new TypeError();
+        var res = [];
+        var thisArg = arguments.length >= 2 ? arguments[1] : void 0;
+        for (var i = 0; i < len; i++){
+            if (i in t){
+                var val = t[i];
+                if (fun.call(thisArg, val, i, t))
+                res.push(val);
+            }
+        }
+        return res;
+    };
 	
 	$.fn.fill = function ( data, sys ) {
         if ( typeof sys != 'undefined' ) {
@@ -167,25 +201,7 @@
         }
         
         return this.each( function() {
-            if ( methods.config.remote ) {
-                if ( methods.config.type.toLowerCase() == 'get' ) {
-                    $.get(data, function( rs, st ) {
-                        if ( methods.config.before( rs, st ) ) {
-                            return methods.fill( this, rs );
-                        }
-                    });
-                } else if ( methods.config.type.toLowerCase() == 'post' ) {
-                    $.post(data, methods.config.params, function( rs, st ) {
-                        if ( methods.config.before( rs, st ) ) {
-                            return methods.fill( this, rs );
-                        }
-                    });
-                } else {
-                    return this;
-                }
-            } else {
-                return methods.fill( this, data );
-            }
+            return methods.fill( this, data );
         });
 	};
 	

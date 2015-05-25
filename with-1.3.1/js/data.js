@@ -18,7 +18,13 @@ result={
 						'wu',
 						'ting'
 					]
-				}
+				}, {
+                    name: 'ting',
+                    authors: [
+                        'wu',
+                        'xin'
+                    ]
+                }
 			]
 		}
 	}
