@@ -58,6 +58,7 @@
 			bool: function ( arg ) {
 				this.data( 'with', methods.ternaryParams( arg ) );
 				this.fill( methods.data );
+                this.children().fill( methods.data );
 			},
 			
 			show: function ( arg ) {
