@@ -5,7 +5,8 @@
 			exampleSelector: '[data-example="true"]',
 			boolSelector: '[data-with^="bool"]',
 			key: /^[a-zA-Z]+$/,
-			reTernary: /^(.+)\?\((.*)\)\((.*)\)$/
+			reTernary: /^(.+)\?\((.*)\)\((.*)\)$/,
+            scriptSplitReg: /[<>(>=)(!=)(<=)(==)+-/*%]/,
 		},
 		
 		sys: {},
@@ -121,7 +122,7 @@
 			var data = $.extend( methods.data, methods.sys );
 			
 			//handle key
-            var keys = arg.split(/[+-/*%]/).filter( function(val) {
+            var keys = arg.split( methods.settings.scriptSplitReg ).filter( function(val) {
                 return methods.settings.key.test( val );
             } ).unique();
 

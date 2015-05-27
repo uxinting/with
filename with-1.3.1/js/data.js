@@ -1,5 +1,6 @@
 result={
 		data: {
+            type: 0,
 			name: 'xin',
 			value: 'hotmail',
 			user: {
