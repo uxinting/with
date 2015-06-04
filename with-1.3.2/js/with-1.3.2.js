@@ -251,7 +251,7 @@
         });
 	};
 
-    $.fn.form_coll = function() {
+    $.fn.input_coll = function() {
         var params = {};
         this.each( function() {
             params[$( this ).attr( 'name' )] = $( this ).val();
