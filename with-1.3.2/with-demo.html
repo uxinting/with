@@ -16,7 +16,7 @@
         <input data-with="bool: input?(val: value)(val: 'hello')">
         <input id="x" readonly="readonly" data-with="val: name">
 	</div>
-	<a data-with="href: name"></a>
+	<a data-with="href: name;text: name"></a>
 	<div data-with="fill: user">
 		<p data-with="text: name"></p>
 		<p data-with="text: age"></p>
@@ -41,17 +41,20 @@
             <tr data-example="true"><td data-with="text: greet"></td></tr>
         </tbody>
     </table>
+    <input id="leagaltest" data-leagal="^\d+$">
 	
-	<script src="js/jquery-1.9.1.js"></script>
-	<script src="js/data.js"></script>
-<!--	<script src="js/with-1.3.1.js"></script>-->
-	<script src="../with.min.js"></script>
+	<script src="../js/jquery-1.9.1.js"></script>
+	<script src="../js/data.js"></script>
+	<script src="js/with-1.3.2.js"></script>
+<!--	<script src="../with.min.js"></script>-->
 	<script>
 	$( 'body' ).fill( result.data );
-//    $('#remote').fill( 'with-demo.html', {config: {remote: true,
-//                                                  function(rs,st){
-//                                                    alert('before');
-//                                                  }}} );
+    $( '#leagaltest' ).leagal_init({
+        judge_fn: function( e ) {
+            if( parseInt( $(e).val() ) < 2 ) return false;
+            return true;
+        }
+    });
 	</script>
 </body>
 </html>

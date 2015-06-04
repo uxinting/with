@@ -7,10 +7,19 @@
 			key: /^[a-zA-Z]+$/,
 			reTernary: /^(.+)\?\((.*)\)\((.*)\)$/,
             scriptSplitReg: /[<>(>=)(!=)(<=)(==)+-/*%]/,
+            
+            //About leagal check
+            leagal: {
+                judge_fn: function( e ) {
+                    return true;
+                }
+            }
 		},
 		
+        //store system arguments
 		sys: {},
         
+        //for remote data fill, TODO:
         config: {
             remote: false,
             type: 'get',
@@ -20,18 +29,25 @@
 		
 		map: {
 			text: function ( arg ) {
-				this.text( methods.unaryParam( arg ) );
+				var param = methods.unaryParam( arg );
+				
+				if (typeof param != 'undefined')
+				this.text( param );
 				this.children().fill( methods.data );
 			},
 			
 			val: function ( arg ) {
-				this.val( methods.unaryParam( arg ) );
+				var param = methods.unaryParam( arg );
+				
+				if (typeof param != 'undefined')
+				this.val( param );
 				this.children().fill( methods.data );
 			},
 			
 			attr: function ( arg ) {
 				var params = methods.dualParams( arg );
-				
+
+				if (typeof params.value != 'undefined')
 				this.attr( params.key, params.value );
 				this.children().fill( methods.data );
 			},
@@ -39,6 +55,7 @@
             data: function( arg ) {
                 var params = methods.dualParams( arg );
                 
+		if (typeof params.value != 'undefined')
                 this.data( params.key, params.value );
                 this.children().fill( methods.data );
             },
@@ -82,12 +99,18 @@
 			},
 			
 			href: function ( arg ) {
-				this.attr( 'href', methods.unaryParam( arg ) );
+				var param = methods.unaryParam( arg );
+				
+				if (typeof param != 'undefined')
+				this.attr( 'href', param );
 				this.children().fill( methods.data );
 			},
 			
 			src: function ( arg ) {
-				this.attr( 'src', methods.unaryParam( arg ) );
+				var param = methods.unaryParam( arg );
+				
+				if (typeof param != 'undefined')
+				this.attr( 'src', param );
 				this.children().fill( methods.data );
 			}
 		},
@@ -134,6 +157,7 @@
             } ).unique();
 
 			for ( var i = 0; i < keys.length; i++ ) {
+				if ( typeof data[keys[i]] == 'undefined' ) return;
 				arg = arg.replace( keys[i], 'data.'+keys[i] )
 			}
 			
@@ -155,7 +179,20 @@
 			} else {
 				return rs[1].trim();
 			}
-		}
+		},
+        
+        //About valid inputs
+        leagal_init: function ( that ) {
+            var reg = RegExp( $( that ).data( 'leagal' ) );
+            $( that ).data( 'error', false );
+            
+            $( that ).bind( 'input propertychange', function( e ) {
+                var isLeagal = reg.test( $( this ).val() );
+                $( this ).css( 'color', isLeagal && methods.settings.leagal.judge_fn( this ) ? 'black' : 'red' );
+                $( this ).data( 'error', !isLeagal );
+            } );
+            return $( that );
+        }
 	};
     
     //Hide all data-example="true"
@@ -213,5 +250,33 @@
             return methods.fill( this, data );
         });
 	};
-	
+
+    $.fn.form_coll = function() {
+        var params = {};
+        this.each( function() {
+            params[$( this ).attr( 'name' )] = $( this ).val();
+        })
+        return params;
+    };
+
+	$.fn.leagal_init = function ( options ) {
+		$.extend( methods.settings.leagal, options );
+		return this.each( function() {
+			return methods.leagal_init( this );
+		});
+	};
+
+	$.fn.leagal_rs = function () {
+		var rs = false;
+		this.each( function() {
+			var error = $( this ).data( 'error' );
+			if ( error ) {
+				$( this ).fadeOut( 300 ).fadeIn( 300 );
+				$( this ).fadeOut( 300 ).fadeIn( 300 );
+			}
+			rs = rs || error;
+		});
+		return !rs;
+	};
+
 })( jQuery );

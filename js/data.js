@@ -1,6 +1,6 @@
 result={
 		data: {
-            type: 0,
+            type: 1,
 			name: 'xin',
 			value: 'hotmail',
 			user: {
